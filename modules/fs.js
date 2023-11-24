@@ -44,7 +44,3 @@ fs.writeFile(
     );
   }
 );
-
-// appendFile modifica um arquivo
-
-// readFile ler um arquivo
