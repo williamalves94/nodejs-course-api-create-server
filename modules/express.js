@@ -5,6 +5,21 @@ const app = express();
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(`Request Type: ${req.method}`);
+  console.log(`Conten-Type: ${req.headers["content-type"]}`);
+  console.log(`Date: ${new Date()}`);
+
+  next();
+});
+
+app.get("/views/", async (req, res) => {
+  res.render("index");
+});
+
+app.set("view engine", "ejs");
+app.set("views", "src/views");
+
 // pegando todos usuarios
 app.get("/users", async (req, res) => {
   try {
@@ -46,6 +61,17 @@ app.patch("/users/:id", async (req, res) => {
     const user = await UserModel.findByIdAndUpdate(id, req.body, { new: true });
 
     res.status(200).json(user);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+
+//removendo usuario
+app.delete("/users/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userRemoved = await UserModel.findByIdAndRemove(id);
+    res.status(200).json(userRemoved);
   } catch (error) {
     res.status(500).send(error.message);
   }
