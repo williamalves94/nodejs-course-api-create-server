@@ -14,7 +14,8 @@ app.use((req, res, next) => {
 });
 
 app.get("/views/", async (req, res) => {
-  res.render("index");
+  const users = await UserModel.find({});
+  res.render("index", { users });
 });
 
 app.set("view engine", "ejs");
